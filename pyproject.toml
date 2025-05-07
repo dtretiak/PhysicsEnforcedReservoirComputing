@@ -1,0 +1,25 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "PhysicsEnforcedReservoirComputing"
+dynamic = ["version"]
+description = 'Code for "Physics-Enforced Reservoir Computing for Forecasting Spatiotemporal Systems" by Tretiak et al.'
+authors = [{ name = "Dima Tretiak", email = "dtretiak@uw.edu" }]
+readme = "README.md"
+requires-python = ">=3.12"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Intended Audience :: Science/Research",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+    "Topic :: Scientific/Engineering :: Physics",
+]
+keywords = ["reservoir computing", "constrained optimization"]
+
+dependencies = ["numpy", "matplotlib", "scipy", "seaborn"]
+
+[project.urls]
+Repository = "https://github.com/dtretiak/PhysicsEnforcedReservoirComputing"
