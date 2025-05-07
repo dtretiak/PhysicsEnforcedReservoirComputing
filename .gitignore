@@ -1,2 +1,6 @@
+# directories 
 data/*
+
+# python package / compilation files
 *.egg*
+*.pyc
