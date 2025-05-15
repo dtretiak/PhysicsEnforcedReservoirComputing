@@ -94,9 +94,10 @@ class ReservoirComputer():
         U = U[:, self.spinup:]
 
         # Loop thru time
-        R = np.zeros((self.Nr, U.shape[1]-1))   # Keep track of reservoir states thru training loop
-        for i in range(U.shape[1]-1): # -1 because we need to predict the NEXT state
+        R = np.zeros((self.Nr, U.shape[1]-1))   
+        for i in range(U.shape[1]-1): 
             R[:,i] = (self.update_state(U[:,i])).reshape(-1)
+        _ = self.update_state(U[:, -1]) 
         U = U[:,1:] # make sure R is aligned with the NEXT state of U
 
         # optimize with ridge regression || AX - B ||^2 + beta ||X||^2
@@ -111,30 +112,6 @@ class ReservoirComputer():
         self.W_out = X
 
         return R #optional return for debugging
-    
-    def getR(self, U):
-        '''
-        Drives Reservoir with input U, and returns the history of reservoir states R for gradient based training
-
-        INPUTS:
-            U: input of shape Nu x N
-        OUTPUTS:
-            U: trimmed input of U to account for spinup
-            R: history of reservoir states of shape Nr x N-1
-        '''
-
-        # synchronize the reservior
-        for i in range(self.spinup):
-            _  = self.update_state(U[:, i])
-        U = U[:, self.spinup:]
-
-        # Loop thru time
-        R = np.zeros((self.Nr, U.shape[1]-1))   # Keep track of res states thru training loop
-        for i in range(U.shape[1]-1): # -1 because we need to predict the NEXT state
-            R[:,i] = (self.update_state(U[:,i])).reshape(-1)
-        U = U[:,1:] # make sure R is aligned with the NEXT state of U
-
-        return R
     
     def forecast(self, n):
         '''
