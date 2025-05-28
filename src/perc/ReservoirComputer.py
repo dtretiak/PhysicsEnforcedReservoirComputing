@@ -85,7 +85,7 @@ class ReservoirComputer():
         self.r = (1-self.alpha)*self.r + self.alpha*r_next
         return self.r
     
-    def train(self, U, method = 'lstsq'):
+    def train(self, U, method = 'direct_solve'):
         '''
         Trains reservoir by fitting output weights W_out with ridge regression
 
@@ -126,7 +126,9 @@ class ReservoirComputer():
         if method == 'lstsq':
             X = scipy.linalg.lstsq(A, B, cond=None)[0].T
         elif method == 'direct_solve':
-            X = scipy.linalg.solve(A, B, assume_a='sym').T
+            with warnings.catch_warnings():
+                warnings.simplefilter("ignore", scipy.linalg.LinAlgWarning)
+                X = scipy.linalg.solve(A, B, assume_a='sym').T
         self.W_out = X
 
         return R #optional return for debugging
@@ -167,7 +169,9 @@ class ReservoirComputer():
         r_C = np.linalg.matrix_rank(C)
         Q, _, _ = scipy.linalg.qr(C.T, pivoting = True)
         Q_silent = Q[:, r_C:]
-        Y_opt = scipy.linalg.solve(A.T @ A + self.beta * np.eye(A.shape[1]), A.T @ B @ Q_silent, assume_a='sym')
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore", scipy.linalg.LinAlgWarning)
+            Y_opt = scipy.linalg.solve(A.T @ A + self.beta * np.eye(A.shape[1]), A.T @ B @ Q_silent, assume_a='sym')
         X_opt = Y_opt @ Q_silent.T
         self.W_out = X_opt.T
         return  R
