@@ -3,6 +3,7 @@ import matplotlib.pyplot as plt
 import matplotlib.animation as animation
 from matplotlib.animation import FFMpegWriter
 from mpl_toolkits.axes_grid1 import make_axes_locatable
+from matplotlib.collections import LineCollection
 
 import perc.utils as utils
 
@@ -340,3 +341,32 @@ def visualize_heat_equation(U, tN, L=1.0):
     plt.show()
     
     return fig
+
+### MSD Visualization
+def plot_phase_space(U):
+    ''' Plot the phase space trajectory from a 2D array U.'''
+
+    # Extract the x and y coordinates from U which is 2 x Nt
+    x = U[0, :]
+    y = U[1, :]
+    points = np.array([x, y]).T
+    segments = np.concatenate([points[:-1, None], points[1:, None]], axis=1)
+    
+    # set the colors according to time (based on segment order)
+    lc = LineCollection(segments, cmap='plasma', norm=plt.Normalize(0, len(segments)))
+    lc.set_array(np.arange(len(segments)))
+    lc.set_linewidth(2)
+    
+    # plot
+    fig, ax = plt.subplots(dpi = 150)
+    ax.add_collection(lc)
+    ax.autoscale()
+    ax.set_xlabel(r"$q$")
+    ax.set_ylabel(r"$p$")
+    ax.set_title("Phase Space Trajectory")
+    
+    # add a colorbar to indicate time progression
+    cbar = fig.colorbar(lc, ax=ax)
+    cbar.set_label("Time")
+    
+    plt.show()

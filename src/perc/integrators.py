@@ -191,8 +191,8 @@ def heat_eq_1D_adiab(u0, tN, dt=0.1, Nx=50, alpha=0.1):
             u_init,
             t_eval=t_eval,
             method='RK45',  
-            rtol=1e-6,
-            atol=1e-8
+            rtol=1e-12,
+            atol=1e-12
         )
     
     U = sol.y  

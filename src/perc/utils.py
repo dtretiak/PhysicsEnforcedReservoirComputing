@@ -128,3 +128,10 @@ def get_adiab_IC(params, total_heat, Nx, L=1.0):
         scaling_factor = total_heat / current_integral
         u0 = scaling_factor * u_unnormalized
     return u0
+
+
+### MSD Utils
+def calc_energy(U, m=1, k=1):
+    q = U[0,:]
+    p = U[1,:]
+    return 0.5 * m * p**2 + 0.5 * k * q**2
