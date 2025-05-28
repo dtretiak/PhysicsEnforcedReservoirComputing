@@ -19,7 +19,15 @@ classifiers = [
 ]
 keywords = ["reservoir computing", "constrained optimization"]
 
-dependencies = ["numpy", "matplotlib", "scipy", "seaborn", "cvxpy"]
+dependencies = [
+    "numpy",
+    "matplotlib",
+    "scipy",
+    "seaborn",
+    "cvxpy",
+    "notebook",
+    "ipykernel",
+]
 
 [project.urls]
 Repository = "https://github.com/dtretiak/PhysicsEnforcedReservoirComputing"
