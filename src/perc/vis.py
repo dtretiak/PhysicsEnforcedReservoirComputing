@@ -135,7 +135,7 @@ def plot_time_series_pred(U, U_pred, t, labels=None, t_lim = None, figsize = (20
         axs[i].set_xlim([0,t_lim])
         if labels is not None:
             axs[i].set(ylabel=labels[i])
-    axs[-1].set(xlabel=r't')
+    axs[-1].set(xlabel=r'$\lambda t$')
     plt.legend(loc = 'lower right')
     plt.show()
 
