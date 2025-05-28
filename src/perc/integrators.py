@@ -129,5 +129,71 @@ def KS_1D_PBC(u0, tN, dt=0.1, domain=(0, 100), Nx=200):
 
     return U, t
 
+def heat_eq_1D_adiab(u0, tN, dt=0.1, Nx=50, alpha=0.1):
+    """
+    Solve the 1D heat equation with insulating boundary conditions (Neumann).
+    
+    INPUTS:
+    u0 : np.ndarray
+        Initial condition (temperature distribution).
+    tN : float
+        Final time.
+    dt : float, optional
+        Time step size (default is 0.1).
+    Nx : int, optional
+        Number of spatial points (default is 50).
+    alpha : float, optional
+        Thermal diffusivity (default is 0.1).
+    
+    OUTPUTS:
+    U : np.ndarray (size (Nx, len(t_eval)))
+        Temperature distribution at each time step.
+    """
+    # Spatial domain parameters
+    L = 1.0  # Domain length
+    dx = L / (Nx - 1)
+    x = np.linspace(0, L, Nx)
+    
+    # Set up initial condition
+    if len(u0) == Nx:
+        u_init = u0.copy()
+    else:
+        # Interpolate initial condition to match grid
+        x_init = np.linspace(0, L, len(u0))
+        u_init = np.interp(x, x_init, u0)
+    
+    def heat_rhs_adiabatic(t, u):
+        """
+        RHS for the heat equation discretized with finite differences.
+        du/dt = alpha * d²u/dx²
 
-# TODO Kol flow
+        BC: du/dx = 0 at x=0 and x=L
+        """
+        dudt = np.zeros_like(u)
+        
+        # Interior points: second derivative using central difference
+        dudt[1:-1] = alpha * (u[2:] - 2*u[1:-1] + u[:-2]) / (dx**2)
+        
+        # left BC
+        dudt[0] = alpha * 2 * (u[1] - u[0]) / (dx**2)
+        
+        # right BC
+        dudt[-1] = alpha * 2 * (u[-2] - u[-1]) / (dx**2)
+        
+        return dudt
+    
+    # Time evaluation points
+    t_eval = np.arange(0, tN + dt, dt)
+    
+    sol = scipy.integrate.solve_ivp(
+            heat_rhs_adiabatic,
+            [0, tN],
+            u_init,
+            t_eval=t_eval,
+            method='RK45',  
+            rtol=1e-6,
+            atol=1e-8
+        )
+    
+    U = sol.y  
+    return U

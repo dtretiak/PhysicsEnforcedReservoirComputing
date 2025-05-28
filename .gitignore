@@ -4,3 +4,4 @@ data/*
 # python package / compilation files
 *.egg*
 *.pyc
+.vscode/settings.json

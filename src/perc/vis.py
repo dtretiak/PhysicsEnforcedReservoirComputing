@@ -291,3 +291,52 @@ def plot_scalar_row(U, dt, cbar_label, show = True, show_title = False, save_nam
         plt.show()
     else:
         plt.close()
+
+
+### Heat Equation Functions
+def visualize_heat_equation(U, tN, L=1.0):
+    """
+    Visualize the results of the 1D heat equation simulation.
+    
+    INPUTS:
+    U : np.ndarray
+        Temperature distribution at each time step from heat_eq_1D_dirch.
+    tN : float
+        Final time.
+    L : float, optional
+        Domain length (default is 1.0).
+    save_animation : bool, optional
+        Whether to save animation as gif (default is False).
+    filename : str, optional
+        Filename for saved animation (default is 'heat_equation.gif').
+    """
+    Nx, Nt_plus_1 = U.shape
+    Nt = Nt_plus_1 - 1
+    x = np.linspace(0, L, Nx)
+    t = np.linspace(0, tN, Nt + 1) 
+    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12, 5))
+    
+    # left panel: temperature evolution at different time points
+    time_indices = [0, Nt//4, Nt//2, 3*Nt//4, Nt]
+    colors = plt.cm.viridis(np.linspace(0, 1, len(time_indices)))
+    
+    for i, idx in enumerate(time_indices):
+        ax1.plot(x, U[:, idx], color=colors[i], label=f't = {t[idx]:.2f}')
+    
+    ax1.set_xlabel('Position x')
+    ax1.set_ylabel('Temperature u(x,t)')
+    ax1.set_title('Temperature Evolution')
+    ax1.legend()
+    ax1.grid(True, alpha=0.3)
+    
+    # right panel: space-time heatmap
+    T_mesh, X_mesh = np.meshgrid(t, x)
+    im = ax2.contourf(T_mesh, X_mesh, U, levels=50, cmap='hot')
+    ax2.set_xlabel('Time t')
+    ax2.set_ylabel('Position x')
+    ax2.set_title('Temperature Distribution (Space-Time)')
+    plt.colorbar(im, ax=ax2, label='Temperature')
+    plt.tight_layout()    
+    plt.show()
+    
+    return fig
