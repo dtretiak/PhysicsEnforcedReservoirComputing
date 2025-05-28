@@ -129,6 +129,28 @@ class ReservoirComputer():
             self.update_state(U_pred[:,i])
         return U_pred
     
+    def forecast_from_IC(self, n, IC):
+        '''
+        Forecast n time steps into the future. Obtain reservoir initial condition by spinning it 
+        up with IC.
+
+        INPUTS:
+            n: The number of time steps to forecast
+            IC: initial condition of shape Nu x eps. Will use all columns of IC to initialize the reservoir.
+        OUTPUTS:
+            U_pred: forecasted state of shape Nu x n
+        ''' 
+        # synchronize the reservior
+        for i in range(IC.shape[1]):
+            _  = self.update_state(IC[:, i])
+
+        # Feed predictions on u back into the RC for forecasting
+        U_pred = np.zeros((self.Nu, n))
+        for i in range(n):
+            U_pred[:,i] = (self.W_out @ self.r).reshape(-1)
+            self.update_state(U_pred[:,i])
+        return U_pred
+    
     def deepcopy(self):
         '''Returns a deepcopy of the ReservoirComputer'''
         return copy.deepcopy(self)
