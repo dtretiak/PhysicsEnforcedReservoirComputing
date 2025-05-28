@@ -343,7 +343,7 @@ def visualize_heat_equation(U, tN, L=1.0):
     return fig
 
 ### MSD Visualization
-def plot_phase_space(U):
+def plot_phase_space(U, labels = None):
     ''' Plot the phase space trajectory from a 2D array U.'''
 
     # Extract the x and y coordinates from U which is 2 x Nt
@@ -361,8 +361,12 @@ def plot_phase_space(U):
     fig, ax = plt.subplots(dpi = 150)
     ax.add_collection(lc)
     ax.autoscale()
-    ax.set_xlabel(r"$q$")
-    ax.set_ylabel(r"$p$")
+    if labels is not None:
+        ax.set_xlabel(labels[0])
+        ax.set_ylabel(labels[1])
+    else:
+        ax.set_xlabel(r"$q$")
+        ax.set_ylabel(r"$p$")
     ax.set_title("Phase Space Trajectory")
     
     # add a colorbar to indicate time progression

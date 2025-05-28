@@ -15,7 +15,7 @@ pip install .
 All examples from the paper are included as jupyter notebooks `./notebooks/`. 
 - For a basic unconstrained RC example please see `basic_RC_example.ipynb`
 - For linear homogeneous constraints of the form $Cu = 0$, please see `kol_flow.ipynb` and `ks.ipynb`
-- For linear inhomogenous constraints of the form $Cu = d$, please see `lv.ipynb` and `heat_eq.ipynb`
+- For linear inhomogenous constraints of the form $Cu = d$, please see `lotka_volterra.ipynb` and `heat_eq.ipynb`
 - For nonlinear constraints, please see `hamiltonian.ipynb`
 
 ## Data Availability 
